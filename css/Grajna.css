@@ -11,7 +11,7 @@ h1 {
     color: #76e99c;
     font-family: "Sevillana", cursive;
     font-weight: 400;
-    font-size: 62px;
+    font-size: 128px;
     font-style: italic;
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: black;
@@ -49,6 +49,12 @@ a {
     font-size:  24px;
     margin: 32px;
     line-height: 1.5;
+}
+
+img {
+    display: inline-block;
+    margin: 10px; 
+    width: 45%;
 }
 
 #development {
