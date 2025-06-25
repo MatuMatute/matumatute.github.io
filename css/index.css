@@ -4,8 +4,10 @@ body {
 }
 
 h1 {
-    font-family: Cochin, Georgia, serif;
-    font-size: 48px;
+    font-family: "Kaushan Script", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 62px;
     text-align: center;
     color: #000ea9;
 }
@@ -22,18 +24,26 @@ h2 {
 }
 
 .twokfivedisconnect {
+    font-family: "IBM Plex Sans JP", sans-serif;
+    font-weight: 400;
+    font-style: normal;
     margin: auto;
     background-color: white;
 }
 
 .twokfivedisconnect h2 {
+    font-family: "IBM Plex Sans JP", sans-serif;
+    font-weight: 700;
+    font-style: normal;
     margin: 10px;
     text-align: center;
 }
 
 .twokfivedisconnect p {
     margin: 32px;
-    font-family: Cambria, sans-serif;
+    font-family: "IBM Plex Sans JP", sans-serif;
+    font-weight: 400;
+    font-style: normal;
     font-size: 18px;
     line-height: 1.5;
 }
@@ -77,7 +87,7 @@ iframe {
 }
 
 #comic-sans {
-    font-family: "Lucida Sans", cursive;
+    font-family: cursive;
     font-size: 48px;
     text-align: center;
     color: #000ea9;
