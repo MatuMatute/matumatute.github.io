@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Juego de Miedito</title>
+        <link rel="icon" href="favicons/JdM.png">
+        <link rel="stylesheet" type="text/css" href="css/JdM.css">
+    </head>
+    <body>
+    <h1>Juego de Miedito</h1>
+    <p>Un día una chica con sus amigas van a explorar una escuela abandonada, pero un suceso inesperado la lleva
+        a una época completamente distinta. Sus amigas no están, y nota que su entorno ha cambiado drásticamente.
+        Esa escuela demacrada ahora tenía un aspecto sospechosamente pulcro, pero no hay nadie.</p>
+    <p>¿Qué pasó? ¿Dónde están sus amigas?</p>
+    <h2>¿Qué es Juego de Miedito?</h2>
+    <p><img src="images/JdM.png" id="img-principal"> Es un videojuego de Rol por turnos 
+        que NO pretende perturbar al jugador, sino que busca intrigarlo, incomodarlo pero también impulsarlo a investigar
+        que es lo que ocurrió, el jugador tiene el control de la chica que se despierta en la escuela abandonada. Te 
+        podés mover en cuatro direcciones con las flechas del teclado e interactuar con Enter o Espacio y correr con
+        Shift Izquierdo. También no es como un juego de rol por turnos cualquiera, sino que las habilidades se
+        adquieren por medio de libros que se pueden hallar en los mapas del videojuego, además no hay un sistema de
+        niveles, sino que la protagonista se hace espiritualmente más poderosa por medio de su equipamiento. Hay
+        objetos que uno puede adquirir por diferentes medios que le permite curar salud y remover estados alterados
+        (Veneno, Ceguera, etc.). El objetivo del jugador es el de hacer que la protagonista sea capaz de resistir al 
+        ataque de un espíritu, riesgo que el videojuego va insinuando en textos que el jugador puede leer opcionalmente, 
+        hay objetos que le informan al jugador piezas de la historia de lo que ocurrió en aquella escuela abandonada.</p>
+    <div onmouseover="cambiarLyly(this)" onmouseout="restaurarLyly(this)"><img src="images/LylyColor.png" id="lyly-box">
+        <p id="parrafo-lyly">Es una chica normal, que tiene su grupo de amigas, tiene buenas notas en el colegio y una
+        familia ideal. Tiene tres mascotas, un perro y dos gatas. Le gusta hacer deportes y tiene pensado estudiar una
+        carrera universitaria al terminar sus estudios secundarios, ella quiere un futuro en el que pueda ayudar a 
+        su familia.</p>
+        <script>
+            // Cambiamos a Lyly y explicamos con más profundidad su relevancia
+            function cambiarLyly(elemento)
+            {
+                elemento.style.borderColor = "white"
+                document.getElementById("lyly-box").src = "images/Lyly.png";
+                document.getElementById("parrafo-lyly").innerHTML = "Lyly es la protagonista de la historia, pensaba que iba a ser divertido explorar un colegio abandonado con sus amigas, quizás por curiosidad, ¿o quizás ella tiene una relación con este lugar?, de todas maneras, es innegable que algo está persiguiendo a este grupo de amigas, y que esta escuela solo ha causado infortunios en sus vidas."
+            }
+            
+            // Devolvemos el texto tramposo y a Lyly con color
+            function restaurarLyly(elemento)
+            {
+                elemento.style.borderColor = "#5e361f"
+                document.getElementById("lyly-box").src = "images/LylyColor.png";
+                document.getElementById("parrafo-lyly").innerHTML = "Es una chica normal, que tiene su grupo de amigas, tiene buenas notas en el colegio y una familia ideal. Tiene tres mascotas, un perro y dos gatas. Le gusta hacer deportes y tiene pensado estudiar una carrera universitaria al terminar sus estudios secundarios, ella quiere un futuro en el que pueda ayudar a su familia."
+            }
+        </script>
+    </div>
+    <h2>¿Dónde puedo jugar Juego de Miedito?</h2>
+        <p style="text-align: center;"><a href="https://drive.google.com/drive/folders/1jMCLalGQ32Lewo4zLe0yJsBBn25yKqjg?usp=sharing" target="_blank">Link de descarga (Google Drive, Windows)</a></p>
+    <h2>Integrantes del grupo</h2>
+    <br>
+    <h2>Florencia Juárez</h2>
+    <h2>Santiago Silva</h2>
+    <h2>Matías Nahuel González Sandoval</h2>
+    <br>
+    <h2>Gameplay de Juego de Miedito</h2>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/-jtwmju0ifI?si=kpzVxz53J9sRfxP7" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <h2>¿Cómo se hizo Juego de Miedito?</h2>
+    <p><img src="images/Ruby1.jpeg" class="img-ruby-proto"> <img src="images/Ruby2.gif">
+        El videojuego se desarrollo por el trascurso de dos semanas, muchas ideas y conceptos se pensaron por la primera
+        semana, Florencia hizo arte conceptual de quién iba a ser la protagonista, Ruby. Aunque hasta aquel momento no
+        teníamos muy claro quién iba a ser la protagonista, pero después al armar un poco la narrativa dentro del motor 
+        RPG Maker se decidió que el nombre fuera "Lyly", también y más que todo por una limitación de tiempo, Lyly no
+        pudo tener un sprite propio, y al final se utilizó un personaje que aparece en el paquete de assets que usamos
+        <a href="https://oceansdream.itch.io/nostalgia-school-time" target="_blank">el cuál podés descargar por medio de su página
+        oficial.</a><img src="images/Ilustracion_mapa.png" class="img-ruby-proto"> Después hicimos conceptos para lo que 
+        sería el mapeo de la escuela abandonada, el cuál originalmente tendría ocho habitaciones, cuatro aulas, dos
+        bibliotecas y dos baños. Pero por la limitación de tiempo se redujo a una biblioteca y cuatro aulas. Hay más
+        ideas y conceptos descartados, si querés saberlos podés leer el documento del proyecto: 
+        <a href="downloads/Documento%20del%20Juego%20de%20RPG%20Maker.pdf">Descargar/Leer documento</a></p>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h2>¿Cómo funciona Juego de Miedito?</h2>
+    <img src="images/c%C3%B3digo5.PNG" class="code-img">
+    <img src="images/c%C3%B3digo6.PNG" class="code-img">
+    <img src="images/c%C3%B3digo7.PNG" class="code-img">
+    <img src="images/c%C3%B3digo8.PNG" class="code-img">
+    <img src="images/c%C3%B3digo9.PNG" class="code-img">
+    <img src="images/c%C3%B3digo10.PNG" class="code-img">
+    <img src="images/c%C3%B3digo11.PNG" class="code-img">
+    <img src="images/c%C3%B3digo12.PNG" class="code-img">
+    <img src="images/c%C3%B3digo13.PNG" class="code-img">
+    <img src="images/c%C3%B3digo14.PNG" class="code-img">
+    <img src="images/c%C3%B3digo15.PNG" class="code-img">
+    <img src="images/c%C3%B3digo16.PNG" class="code-img">
+    <img src="images/c%C3%B3digo17.PNG" class="code-img">
+    </body>
+</html>

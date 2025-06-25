@@ -1,0 +1,39 @@
+body {
+    margin: auto;
+}
+
+header {
+    background-color: aqua;
+}
+
+h1 {
+    text-align: center;
+    color: #76e99c;
+    font-family: "Sevillana", cursive;
+    font-weight: 400;
+    font-size: 62px;
+    font-style: italic;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+}
+
+h2 {
+    text-align: center;
+    color: white;
+    font-family: "Sevillana", cursive;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 400;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+}
+
+div {
+    background-color: greenyellow;
+}
+
+p {
+    font-size:  24px;
+    margin: 32px;
+    line-height: 1.5;
+}

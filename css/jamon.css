@@ -1,0 +1,39 @@
+body {
+    background-color: #b35959
+}
+
+h1 {
+    font-family: "Pixelify Sans", sans-serif;
+    color: #ffffff;
+    font-optical-sizing: auto;
+    font-size: 48px;
+    text-align: center;
+}
+
+h2 {
+    font-family: "Pixelify Sans", sans-serif;
+    color: #ffffff;
+    font-optical-sizing: auto;
+    font-size: 32px;
+    text-align: center;
+}
+
+p {
+    font-family: "Pixelify Sans", sans-serif;
+    color: #ffffff;
+    line-height: 1.5;
+    font-size: 24px;
+    font-optical-sizing: auto;
+    margin: 32px;
+}
+
+img {
+    display: inline-block;
+    margin: 30px;
+    width: 45%
+}
+
+iframe {
+    display: block;
+    margin: auto;
+}

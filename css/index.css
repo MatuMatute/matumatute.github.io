@@ -1,0 +1,84 @@
+body {
+    margin: auto;
+    background-color: #cfffff;
+}
+
+h1 {
+    font-family: Cochin, Georgia, serif;
+    font-size: 48px;
+    text-align: center;
+    color: #000ea9;
+}
+
+h2 {
+    font-family: Cambria, sans-serif;
+    margin: 20px;
+    text-align: center;
+}
+
+#introduccion {
+    margin: auto;
+    background-color: aquamarine
+}
+
+.twokfivedisconnect {
+    margin: auto;
+    background-color: white;
+}
+
+.twokfivedisconnect h2 {
+    margin: 10px;
+    text-align: center;
+}
+
+.twokfivedisconnect p {
+    margin: 32px;
+    font-family: Cambria, sans-serif;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+p {
+    margin-top: 32px;
+    margin-bottom: 32px;
+    margin-left: 48px;
+    margin-right: 48px;
+    font-family: Cambria, sans-serif;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+a {
+    margin: 20px
+}
+
+#autores {
+    text-align: center;
+    font-family: "Courier New", monospace;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.exposicion {
+    display: inline;
+    margin-left: 2px;
+    width: 49.7%;
+}
+
+img {
+    display: block;
+    margin: auto;
+    width: 80%
+}
+
+iframe {
+    display: block;
+    margin: auto;
+}
+
+#comic-sans {
+    font-family: "Lucida Sans", cursive;
+    font-size: 48px;
+    text-align: center;
+    color: #000ea9;
+}
