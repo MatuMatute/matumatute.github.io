@@ -29,10 +29,11 @@ h2 {
 }
 
 div {
-    background-color: greenyellow;
+    background-color: green;
 }
 
 p {
+    color: white;
     font-family: "Darumadrop One", sans-serif;
     font-weight: 400;
     font-style: normal;
@@ -42,7 +43,6 @@ p {
 }
 
 a {
-    text-align: center;
     font-family: "Darumadrop One", sans-serif;
     font-weight: 400;
     font-style: normal;
@@ -52,15 +52,20 @@ a {
 }
 
 img {
-    display: inline-block;
-    margin: 10px; 
-    width: 45%;
+    display: block;
+    margin: auto;
+    width: 80%;
 }
 
 #development {
     float: right;
     margin: 10px; 
     width: 50%;
+}
+
+code {
+    background-color : white;
+    padding : 5px;
 }
 
 iframe {

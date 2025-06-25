@@ -26,7 +26,7 @@
                     en el que guardás las semillas de tomate y los tomates. El jugador o la jugadora puede ir a su casa
                     para dormir y pasar al siguiente día.</p>
                 <h2>Descargá Grajna acá</h2>
-                <a href="https://drive.google.com/drive/folders/11ccSWQ2KbK6s3gXVWP0ZJmoXj_rJ_sGc?usp=sharing" target="_blank">Link de descarga (Google Drive, Windows)</a>
+                <p style="text-align: center;"><a href="https://drive.google.com/drive/folders/11ccSWQ2KbK6s3gXVWP0ZJmoXj_rJ_sGc?usp=sharing" target="_blank">Link de descarga (Google Drive, Windows)</a></p>
                 <br>
                 <h2>Integrantes del proyecto</h2>
                 <br>
@@ -45,13 +45,534 @@
                     que la escala del proyecto cambió drásticamente, puesto a que no teníamos ninguna experiencia en el desarrollo de
                     videojuegos en 3D. Aún así esto permitió que adquirieramos muchos conocimientos respecto a cómo funciona
                     la programación y el uso de Unity Engine, motor de creación de videojuegos que es muy completo en lo que
-                    brinda a un desarrollador o desarrolladora de videojuegos pero que requiere de aprendizaje.</p>
+                    brinda a un desarrollador o desarrolladora de videojuegos pero que requiere de mucho aprendizaje para poder
+                    sacar el máximo partido del mismo.</p>
+                <br>
                 <h2>Galería</h2>
                 <img src="images/Captura1.png">
                 <img src="images/Captura3.png">
                 <img src="images/Captura4.png">
                 <h2>¿Cómo funciona Grajna?</h2>
+                <p>Son varios los scripts que componen el prototipo que podés descargar:</p>
+                <pre style="white-space: pre; background-color: white;">
+                <code>
+using UnityEngine;
+
+public class Plot : MonoBehaviour<br>
+{<br>
+    public GameObject currentPlant;     // La planta que tiene sembrada<br>
+    public Transform plantPoint;        // Dónde colocar la planta<br>
+    public Inventario inventario;<br>
+
+    public void PlantSeed(GameObject plantPrefab)<br>
+    {<br>
+        if (currentPlant == null)<br>
+        {<br>
+        currentPlant = Instantiate(plantPrefab, plantPoint.position, Quaternion.identity);<br>
+        }<br>
+    }<br>
+
+    public void TryHarvest()<br>
+    {<br>
+        if (currentPlant != null)<br>
+        {<br>
+            var plant = currentPlant.GetComponent&lt;PlantMultipleModels&gt;();<br>
+            if (plant != null && plant.IsFullyGrown())<br>
+            {<br>
+                plant.Harvest();<br>
+                currentPlant = null;<br>
+                inventario.addItem("tomate", 1); // Añadir un tomate al inventario<br>
+                inventario.addItem("semilla_tomate", 2); // Añadir dos semillas de tomate al inventario<br>
+            }<br>
+        }<br>
+    }<br>
+}
+                </code>
+                <code>
+using UnityEngine;<br>
+
+public class PlantMultipleModels : MonoBehaviour<br>
+{<br>
+    public GameObject[] growthModels; // Modelos: semilla, brote, madura<br>
+    public int daysToGrow = 3;        // Cuántos días tarda en crecer<br>
+    private int currentDay = 0;<br>
+    
+    private void Start()<br>
+    {<br>
+        ActivateModel(0); // Empieza con la semilla<br>
+        GameTime.Instance.OnNewDay += Grow; // Suscribe al evento de día nuevo<br>
+    }<br>
+    
+    void Grow()<br>
+    {<br>
+        currentDay++; // Avanza un día<br>
+        int stage = Mathf.Min(currentDay, growthModels.Length - 1); // Calcula en qué etapa está<br>
+        ActivateModel(stage); // Muestra la etapa correcta<br>
+    }<br>
+    
+    void ActivateModel(int index)<br>
+    {<br>
+        for (int i = 0; i  growthModels.Length; i++)<br>
+        {<br>
+            growthModels[i].SetActive(i == index); // Activa solo el modelo correcto<br>
+        }<br>
+    }<br>
+    
+    public bool IsFullyGrown() =&gt; currentDay &gt;= daysToGrow; // ¿Ya creció?
+
+    public void Harvest()<br>
+    {<br>
+        if (IsFullyGrown()) Destroy(gameObject); // Si está lista, destruye (se cosechó)<br>
+    }<br>
+
+    private void OnDestroy()<br>
+    {<br>
+        GameTime.Instance.OnNewDay -= Grow; // Se desuscribe al destruirse<br>
+    }<br>
+}
+                </code>
+                <code>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+
+public class Movimiento : MonoBehaviour<br>
+{<br>
+    public float velocidadMovimiento = 5f;   // Velocidad de movimiento normal del jugador<br>
+    public float velocidadCarrera = 10f;     // Velocidad de movimiento al correr<br>
+
+    public Animator animator;<br>
+
+    private CharacterController characterController;<br>
+    private float velocidadVertical = 0f;<br>
+    private int saltosRestantes = 10; // Número de saltos restantes (1 para el salto simple y 1 para el doble salto)<br>
+
+    public Rigidbody rb;<br>
+    public float jumpheight = 3;<br>
+    public Transform groundCheck;<br>
+    public float groundDistance = 0.1f;<br>
+    public LayerMask groundMask;<br>
+    bool isGrounded;<br>
+
+
+
+    private void Start()<br>
+    {<br>
+        // Obtener el componente CharacterController adjunto a este GameObject<br>
+        characterController = GetComponent&lt;CharacterController&gt;();<br>
+    }<br>
+
+    void Update()<br>
+    {<br>
+        // Obtener las entradas de teclado para el movimiento<br>
+        float movimientoHorizontal = Input.GetAxis("Horizontal");<br>
+        float movimientoVertical = Input.GetAxis("Vertical");<br>
+
+        // Aplicar la gravedad<br>
+        if (characterController.isGrounded)<br>
+        {<br>
+            velocidadVertical = -0.5f; // Restablecer la velocidad vertical cuando el jugador toca el suelo<br>
+            saltosRestantes = 10;  // Reiniciar los saltos disponibles al tocar el suelo<br>
+        }<br>
+        else<br>
+        {<br>
+            // Aplicar la gravedad constante cuando el jugador está en el aire<br>
+            velocidadVertical += Physics.gravity.y * Time.deltaTime;<br>
+        }<br>
+
+        // Saltar<br>
+        if (Input.GetButtonDown("Jump") && saltosRestantes &gt; 0)<br>
+        {<br>
+            // Calcular la velocidad vertical necesaria para realizar un salto (ajustar el valor 3.0f según sea necesario)<br>
+            velocidadVertical = Mathf.Sqrt(2f * 3.0f * Mathf.Abs(Physics.gravity.y));<br>
+            saltosRestantes--;  // Reducir el número de saltos restantes<br>
+        }<br>
+
+        // Verificar si el jugador está corriendo (presionando la tecla "Shift")<br>
+        float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? velocidadCarrera : velocidadMovimiento;<br>
+
+        // Crear un vector de movimiento basado en la dirección de la cámara<br>
+        Vector3 movimiento = (transform.forward * movimientoVertical + transform.right * movimientoHorizontal) * currentSpeed;<br>
+
+        // Aplicar la velocidad vertical al movimiento<br>
+        movimiento.y = velocidadVertical;<br>
+
+        // Mover al jugador utilizando el CharacterController<br>
+        characterController.Move(movimiento * Time.deltaTime);<br>
+
+        animator.SetFloat("VelX", movimientoHorizontal);<br>
+        animator.SetFloat("VelY", movimientoVertical);<br>
+
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);<br>
+
+        if (Input.GetKey("space") && isGrounded)<br>
+        {<br>
+            animator.Play("Jump");<br>
+        }<br>
+
+        
+
+    }
+}
+                </code>
+                <code>
+using UnityEngine;<br>
+using UnityEngine.UI;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using TMPro;<br>
+
+public class Inventario : MonoBehaviour<br>
+{<br>
+    // Declaro el listado que contiene el tipo de los objetos que posee el jugador.<br>
+    public List&lt;string&gt; tipo = new List&lt;string&gt;();<br>
+    // Este otro listado contiene las cantidades de cada objeto que posee el jugador<br>
+    public List&lt;int&gt; cantidad = new List&lt;int&gt;();<br>
+    // Acá declaro un array que contiene las ranuras del inventario como interfaz<br>
+    public GameObject[] slots;<br>
+    
+    public Sprite icon1; // Icono de semilla_tomate<br>
+    public Sprite icon2; // Icono de tomate<br>
+    public Sprite empty_icon; // Icono de la ranura de inventario vacía<br>
+    
+    private bool inventoryOpen; // Variable booleana que me dice sí el inventario está abierto o no<br>
+    
+    void Start()<br>
+    {<br>
+        hideInventory();<br>
+    }<br>
+    
+    void hideInventory() // Función que esconde el inventario al jugador<br>
+    {<br>
+        inventoryOpen = false;<br>
+        
+        for (int i = 0; i &lt; slots.Length; i++)<br>
+        {<br>
+            slots[i].SetActive(false);<br>
+        }<br>
+    }<br>
+    
+    void showInventory() // Función que muestra el inventario al jugador<br>
+    {<br>
+        inventoryOpen = true;<br>
+        
+        for (int i = 0; i &lt; slots.Length; i++)<br>
+        {<br>
+            slots[i].SetActive(true);<br>
+        }<br>
+        
+        if (tipo.Count &gt; 0) // Sí el inventario tiene objetos, dibujarlos en la interfaz<br>
+        {<br>
+            for (int i = 0; i &lt; tipo.Count; i++)<br>
+            {<br>
+                if (tipo[i] == "semilla_tomate")<br>
+                {<br>
+                    slots[i].GetComponent&lt;Image&gt;().sprite = icon1; // Asignamos un icono al objeto<br>
+                }<br>
                 
+                if (tipo[i] == "tomate")<br>
+                {<br>
+                    slots[i].GetComponent&lt;Image&gt;().sprite = icon2; // Asignamos un icono al objeto<br>
+                }<br>
+                
+                slots[i].transform.Find("Cantidad").GetComponent&lt;TMP_Text&gt;().text = cantidad[i].ToString(); // Mostramos la cantidad que tenemos de dicho objeto<br>
+            }<br>
+
+            if (tipo.Count &lt; slots.Length)<br>
+            {<br>
+                for (int i = tipo.Count; i &lt; slots.Length; i++)<br>
+                {<br>
+                    slots[i].GetComponent&lt;Image&gt;().sprite = empty_icon; // Icono de la ranura vacia<br>
+                    slots[i].transform.Find("Cantidad").GetComponent&lt;TMP_Text&gt;().text = ""; // Ya no mostramos la cantidad de objetos porque no los hay<br>
+                }<br>
+            }<br>
+        }<br>
+        else // Sí el inventario ya no tiene objetos, hacemos que la interfaz del inventario no muestre ningún objeto "fantasma"<br>
+        {<br>
+            for (int i = 0; i &lt; slots.Length; i++)<br>
+            {<br>
+                slots[i].GetComponent&lt;Image&gt;().sprite = empty_icon; // Icono de la ranura vacia<br>
+                slots[i].transform.Find("Cantidad").GetComponent&lt;TMP_Text&gt;().text = ""; // Ya no mostramos la cantidad de objetos porque no los hay<br>
+            }<br>
+        }<br>
+    }<br>
+    
+    public void addItem(string item, int quantity) // Función que se encarga de añadir un objeto al inventario<br>
+    {<br>
+        if (tipo.Contains(item))<br>
+        {<br>
+            cantidad[tipo.IndexOf(item)] += quantity;<br>
+        }<br>
+        else<br>
+        {<br>
+            tipo.Add(item);<br>
+            cantidad.Add(quantity);<br>
+        }<br>
+    }<br>
+
+    public void removeItem(string item, int quantity = 1) // Función que se encarga de remover un objeto del inventario<br>
+    {<br>
+        int index_item = tipo.IndexOf(item); // Agarramos el índice del objeto que vamos a remover<br>
+
+        if (cantidad[index_item] &gt; quantity)<br>
+        {<br>
+            cantidad[index_item] -= quantity; // Removemos la cantidad del objeto<br>
+        }<br>
+        else<br>
+        {<br>
+            // Removemos el objeto del inventario<br>
+            tipo.RemoveAt(index_item);<br>
+            cantidad.RemoveAt(index_item);<br>
+        }<br>
+    }<br>
+    
+    void Update() // Función que se activa cada frame<br>
+    {<br>
+        if (Input.GetKeyDown(KeyCode.I)) // Al tocar la tecla I<br>
+        {<br>
+            if (inventoryOpen) // Sí el inventario está abierto<br>
+        {<br>
+            hideInventory();<br>
+        }<br>
+        else // Sí el inventario NO está abierto<br>
+        {<br>
+            showInventory();<br>
+        }<br>
+        }<br>
+    }<br>
+}
+                </code>
+                <code>
+using UnityEngine;<br>
+using System;      // Permite usar eventos y otros elementos como Action<br>
+using TMPro;<br>
+
+public class GameTime : MonoBehaviour<br>
+{<br>
+
+    public void TriggerNewDay()<br>
+    {<br>
+        OnNewDay?.Invoke(); // Llama a todos los que estén suscritos al evento OnNewDay<br>
+    }<br>
+    public static GameTime Instance; // Variable estática para que otros scripts puedan acceder a esta clase<br>
+
+    public int currentDay = 1; // Día actual en el juego (entero)<br>
+    public float secondsPerDay = 10f; // Cuántos segundos reales equivalen a un "día" en el juego (número decimal)<br>
+    private float timer; // Variable interna para contar el tiempo que pasa<br>
+
+     public event Action OnNewDay; // Evento que se ejecuta cuando pasa un nuevo día<br>
+
+    public CicloDiaNoche cicloDiaNoche; // Asigna tu CicloDiaNoche en el inspector<br>
+    public TMP_Text ui_text; // Asigna tu TMP_Text en el inspector<br>
+
+    private void Awake() // Función que se llama automáticamente al iniciar el script<br>
+    {<br>
+        if (Instance == null) Instance = this; // Guarda una única instancia accesible desde cualquier script<br>
+    }<br>
+
+    void Update() // Se llama automáticamente una vez por frame<br>
+    {<br>
+        timer += Time.deltaTime; // Aumenta el temporizador según el tiempo real que pasó<br>
+
+        if (cicloDiaNoche == null || ui_text == null) return;<br>
+
+        int hora = Mathf.FloorToInt(cicloDiaNoche.Hora);<br>
+        int minutos = Mathf.FloorToInt((cicloDiaNoche.Hora - hora) * 60f);<br>
+        ui_text.text = "Día: " + cicloDiaNoche.Dia + "\nHora: " + hora.ToString("00") + ":" + minutos.ToString("00");<br>
+
+        if (timer &gt;= secondsPerDay) // Si pasó el tiempo necesario para un día...<br>
+        {<br>
+            timer = 0f;     // Reinicia el temporizador<br>
+            currentDay++;   // Avanza un día<br>
+            OnNewDay?.Invoke(); // Llama a todos los que estén suscritos al evento OnNewDay<br>
+        }<br>
+    }<br>
+}
+                </code>
+                <code>
+using UnityEngine;<br>
+
+public class DormirInteractuable : MonoBehaviour<br>
+{<br>
+    public CicloDiaNoche cicloDiaNoche; // Asigna el CicloDiaNoche en el inspector<br>
+    public float distanciaInteraccion = 2f; // Distancia máxima para interactuar<br>
+
+    public GameObject canvasdormir;<br>
+    public GameObject teclaE;<br>
+
+
+    void Start()<br>
+    {<br>
+        if (canvasdormir != null)<br>
+        {<br>
+            canvasdormir.SetActive(false); // Asegúrate de que el panel esté oculto al inicio<br>
+        }<br>
+        else<br>
+        {<br>
+            Debug.LogWarning("canvasdormir no está asignado en el inspector.");<br>
+        }<br>
+    }
+
+    void Update()<br>
+    {<br>
+
+        GameObject jugador = GameObject.FindGameObjectWithTag("Player");<br>
+        if (jugador == null) return;<br>
+
+        float distancia = Vector3.Distance(transform.position, jugador.transform.position);<br>
+
+        if (distancia &lt;= distanciaInteraccion && Input.GetKeyDown(KeyCode.E)) //Con la tecla E pasa el dia<br>
+        {<br>
+            Dormir();<br>
+        }<br>
+    }
+
+
+    public void Dormir()<br>
+    {
+
+
+        if (canvasdormir != null)<br>
+        {<br>
+            canvasdormir.SetActive(true); // Muestra el panel de dormir<br>
+        }<br>
+        else<br>
+        {<br>
+            Debug.LogWarning("canvasdormir no está asignado en el inspector.");<br>
+            return; // Sale si no hay panel para mostrar<br>
+        }<br>
+        if (cicloDiaNoche != null)<br>
+        {<br>
+            cicloDiaNoche.Dia++;<br>
+            cicloDiaNoche.Hora = 6;<br>
+        }<br>
+
+        if (GameTime.Instance != null)<br>
+        {<br>
+            Debug.Log("Invocando OnNewDay");<br>
+            GameTime.Instance.TriggerNewDay();<br>
+        }<br>
+        else<br>
+        {<br>
+            Debug.LogWarning("GameTime.Instance es null");<br>
+        }<br>
+
+        Invoke(nameof(EsconderPanel), 1.5f); // Esconde el panel después de 1.5 segundos<br>
+
+    }
+    
+    void EsconderPanel()<br>
+        {<br>
+            if (canvasdormir != null)<br>
+                canvasdormir.SetActive(false);<br>
+        }<br>
+}
+                </code>
+                <code>
+using UnityEngine;<br>
+
+public class CicloDiaNoche : MonoBehaviour<br>
+{<br>
+    [Range(0.0f, 24f)] public float Hora = 12;<br>
+    public int Dia = 1; // &lt;-- Agregado: contador de días<br>
+    public Transform Sol;<br>
+
+    public float DuracionDelDiaEnMinutos = 1;<br>
+
+    private float SolX;<br>
+
+    private void Update()<br>
+    {<br>
+        Hora += Time.deltaTime * (24 / (60 * DuracionDelDiaEnMinutos));<br>
+
+        if (Hora &gt;= 24)<br>
+        {<br>
+            Hora = 0;<br>
+            Dia++; // &lt;-- Agregado: suma un día cuando pasa de 24 horas<br>
+        }<br>
+        
+        RotacionSol();<br>
+    }<br>
+
+    void RotacionSol()<br>
+    {<br>
+        SolX = 15 * (Hora - 6); // Así a las 12, SolX = 90 (Sol arriba)<br>
+
+        Sol.localEulerAngles = new Vector3(SolX, 0, 0);<br>
+
+        if (Hora &lt; 6 || Hora &gt; 18)<br>
+        {<br>
+            Sol.GetComponent&lt;Light&gt;().intensity = 0;<br>
+        }<br>
+        else<br>
+        {<br>
+            Sol.GetComponent&lt;Light&gt;().intensity = 1;<br>
+        }<br>
+    }<br>
+}<br>
+                </code>
+                <code>
+using UnityEngine;<br>
+
+public class CamaraMouse : MonoBehaviour<br>
+{<br>
+    public Transform objetivo;      // El personaje a seguir<br>
+    public float distancia = 5f;    // Distancia detrás del personaje<br>
+    public float altura = 2f;       // Altura sobre el personaje<br>
+    public float sensibilidadX = 2f;<br>
+    public float sensibilidadY = 2f;<br>
+    public float minY = -40f;<br>
+    public float maxY = 80f;<br>
+    public float suavizado = 5f; // Velocidad de retorno<br>
+
+    private float rotacionY = 0f;<br>
+    private float rotacionX = 10f;<br>
+    private float rotacionXInicial = 10f;<br>
+
+    void Start()<br>
+    {<br>
+        Cursor.lockState = CursorLockMode.Locked;<br>
+        Vector3 angulos = objetivo.eulerAngles;<br>
+        rotacionY = angulos.y;<br>
+        rotacionX = rotacionXInicial;<br>
+    }<br>
+
+    void Update()<br>
+    {<br>
+        if (Input.GetMouseButtonDown(1))<br>
+            Cursor.lockState = CursorLockMode.Locked;<br>
+        if (Input.GetMouseButtonUp(1))<br>
+            Cursor.lockState = CursorLockMode.None;<br>
+    }
+
+    void LateUpdate()<br>
+    {<br>
+        if (objetivo == null) return;<br>
+
+        // Solo rota la cámara si el botón derecho está presionado<br>
+        if (Input.GetMouseButton(1))<br>
+        {<br>
+            rotacionY += Input.GetAxis("Mouse X") * sensibilidadX;<br>
+            rotacionX -= Input.GetAxis("Mouse Y") * sensibilidadY;<br>
+            rotacionX = Mathf.Clamp(rotacionX, minY, maxY);<br>
+        }<br>
+        else<br>
+        {<br>
+            // Vuelve suavemente detrás del personaje y a la altura inicial<br>
+            rotacionY = Mathf.LerpAngle(rotacionY, objetivo.eulerAngles.y, Time.deltaTime * suavizado);<br>
+            rotacionX = Mathf.Lerp(rotacionX, rotacionXInicial, Time.deltaTime * suavizado);<br>
+        }<br>
+
+        Quaternion rotacion = Quaternion.Euler(rotacionX, rotacionY, 0);<br>
+        Vector3 offset = rotacion * new Vector3(0, 0, -distancia);<br>
+        Vector3 posicionDeseada = objetivo.position + Vector3.up * altura + offset;<br>
+
+        transform.position = posicionDeseada;<br>
+        transform.LookAt(objetivo.position + Vector3.up * altura);<br>
+    }<br>
+}
+                </code>
+                </pre>
             </div>
         </header>
     </body>
