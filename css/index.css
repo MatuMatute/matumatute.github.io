@@ -3,6 +3,33 @@ body {
     background-color: #cfffff;
 }
 
+header {
+    background-color: aquamarine;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    font-family: "Matangi", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#Mi-nombre {
+    font-family: "Matangi", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+div {
+    margin: 40px;
+}
+
 h1 {
     font-family: "Kaushan Script", cursive;
     font-weight: 400;
@@ -20,7 +47,8 @@ h2 {
 
 #introduccion {
     margin: auto;
-    background-color: aquamarine
+    background-color: aquamarine;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 .twokfivedisconnect {
@@ -40,7 +68,7 @@ h2 {
 }
 
 .twokfivedisconnect p {
-    margin: 48px;
+    margin: 62px;
     font-family: "IBM Plex Sans JP", sans-serif;
     font-weight: 400;
     font-style: normal;
@@ -70,15 +98,17 @@ a {
 }
 
 .exposicion {
-    display: inline;
-    margin-left: 2px;
-    width: 49.7%;
+    display: block;
+    margin: auto;
+    width: 80%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 img {
     display: block;
     margin: auto;
     width: 80%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 iframe {
@@ -91,4 +121,22 @@ iframe {
     font-size: 48px;
     text-align: center;
     color: #000ea9;
+}
+
+.contactame {
+    background-color: black;
+    margin: auto;
+}
+
+.contactame h1 {
+    color: white;
+}
+
+.contactame h2 {
+    color: white;
+}
+
+footer {
+    text-align: center;
+    background-color: beige;
 }
